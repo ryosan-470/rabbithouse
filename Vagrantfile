@@ -20,11 +20,9 @@ Vagrant.configure("2") do |config|
     # Customize the amount of CPU on the VM:
     vb.cpus = "2"
   end
-  # Enable provisioning with a shell script. Additional provisioners such as
-  # Puppet, Chef, Ansible, Salt, and Docker are also available. Please see the
-  # documentation for more information about their specific syntax and use.
-  # config.vm.provision "shell", inline: <<-SHELL
-  #   apt-get update
-  #   apt-get install -y apache2
-  # SHELL
+  # Ansible Provision
+  config.vm.provision "ansible" do |ansible|
+    ansible.playbook = "ansible/main.yml"
+    ansible.verbose = "vvv"
+  end
 end

@@ -1,0 +1,19 @@
+---
+- name: "Change apt mirror url"
+  become: true
+  replace: >-
+    dest='/etc/apt/sources.list'
+    regexp='archive.ubuntu.com/ubuntu'
+    replace='ftp.iij.ad.jp/pub/linux/ubuntu/archive'
+
+- name: "Install the common apt packages"
+  become: true
+  apt:
+    name={{ item }} state=present update_cache=yes
+  with_items:
+    - git
+    - zsh
+    - vim
+    - build-essential
+    - python
+
