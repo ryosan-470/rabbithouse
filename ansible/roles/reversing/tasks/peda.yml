@@ -1,0 +1,22 @@
+---
+- name: "Install gdb from apt"
+  become: true
+  apt:
+    name: gdb
+    state: latest
+
+- name: "Is gdbinit available?"
+  stat:
+    path: ~/.gdbinit
+  register: is_gdbpeda
+
+- name: "Get repository from GitHub"
+  when: is_gdbpeda.stat.exists == False
+  git:
+    repo: https://github.com/longld/peda
+    dest: "{{ TOOLS_DIRECTORY_REVERSING }}/peda"
+
+- name: "Link gdb and gdb-peda"
+  when: is_gdbpeda.stat.exists == False
+  shell: echo "source {{ TOOLS_DIRECTORY_REVERSING }}/peda/peda.py" > ~/.gdbinit
+
