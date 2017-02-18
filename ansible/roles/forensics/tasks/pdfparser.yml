@@ -22,5 +22,5 @@
   when: is_pdfparser.stat.exists == False
   file:
     path: ~/bin/pdf-parser
-    mode: 0655
+    mode: 0755
 

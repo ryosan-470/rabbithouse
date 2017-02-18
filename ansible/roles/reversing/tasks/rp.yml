@@ -9,7 +9,7 @@
   get_url:
     url: "https://github.com/0vercl0k/rp/releases/download/v1/{{ item }}"
     dest: "~/bin/{{ item }}"
-    mode: 0655
+    mode: 0755
   with_items:
     - rp-lin-x64
     - rp-lin-x86

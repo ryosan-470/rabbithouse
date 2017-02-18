@@ -1,0 +1,36 @@
+---
+- name: "Is pkcrack available?"
+  stat:
+    path: ~/bin/pkcrack
+  register: is_pkcrack
+
+- name: "DL via URL"
+  when: is_pkcrack.stat.exists == False
+  get_url:
+    url: "https://www.unix-ag.uni-kl.de/~conrad/krypto/pkcrack/pkcrack-1.2.2.tar.gz"
+    dest: "{{ TOOLS_DIRECTORY_CRYPTO }}/pkcrack-1.2.2.tar.gz"
+
+- name: "Extract source code"
+  when: is_pkcrack.stat.exists == False
+  unarchive:
+    src: "{{ TOOLS_DIRECTORY_CRYPTO }}/pkcrack-1.2.2.tar.gz"
+    dest: "{{ TOOLS_DIRECTORY_CRYPTO }}/"
+    remote_src: True
+
+- name: "Build pkcrack"
+  when: is_pkcrack.stat.exists == False
+  command: make -j
+  args:
+    chdir: "{{ TOOLS_DIRECTORY_CRYPTO }}/pkcrack-1.2.2/src"
+
+- name: "Link pkcrack to ~/bin"
+  file:
+    src: "{{ TOOLS_DIRECTORY_CRYPTO }}/pkcrack-1.2.2/src/{{ item }}"
+    dest: "~/bin/{{ item }}"
+    state: link
+  with_items:
+    - extract
+    - findkey
+    - makekey
+    - pkcrack
+    - zipdecrypt

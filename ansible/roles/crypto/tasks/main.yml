@@ -1,2 +1,5 @@
 ---
 - include: hashpump.yml
+- include: msieve.yml
+- include: pkcrack.yml
+- include: yafu.yml

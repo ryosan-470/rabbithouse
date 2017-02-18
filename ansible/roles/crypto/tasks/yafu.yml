@@ -1,0 +1,35 @@
+---
+- name: "Is yafu available?"
+  stat:
+    path: ~/bin/yafu
+  register: is_yafu
+
+- name: "Create directory"
+  when: is_yafu.stat.exists == False
+  file:
+    dest: "{{ TOOLS_DIRECTORY_CRYPTO }}/yafu"
+    state: directory
+
+- name: "DL via URL"
+  when: is_yafu.stat.exists == False
+  get_url:
+    url: "https://downloads.sourceforge.net/project/yafu/1.34/yafu-1.34.zip?r=&ts=1487436172&use_mirror=jaist"
+    dest: "{{ TOOLS_DIRECTORY_CRYPTO }}/yafu/yafu.zip"
+
+- name: "Extract source code"
+  when: is_yafu.stat.exists == False
+  unarchive:
+    src: "{{ TOOLS_DIRECTORY_CRYPTO }}/yafu/yafu.zip"
+    dest: "{{ TOOLS_DIRECTORY_CRYPTO }}/yafu/"
+    remote_src: True
+
+- name: "Change yafu privilege"
+  file: 
+    path: "{{ TOOLS_DIRECTORY_CRYPTO }}/yafu/yafu"
+    mode: 0755
+
+- name: "Link yafu to ~/bin"
+  file:
+    src: "{{ TOOLS_DIRECTORY_CRYPTO }}/yafu/yafu"
+    dest: ~/bin/yafu
+    state: link
