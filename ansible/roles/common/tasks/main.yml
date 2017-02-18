@@ -18,6 +18,10 @@
     - vim
     - build-essential
     - python
+    - python-pip
+    - python3
+    - python3-pip
+    - make
 
 - name: "Create directory to store tools"
   file:
@@ -30,3 +34,13 @@
     - "{{ TOOLS_DIRECTORY_FORENSICS }}"
     - "{{ TOOLS_DIRECTORY_MISC }}"
     - "{{ TOOLS_DIRECTORY_PROGRAMMING }}"
+
+- name: "Check PATH configuration at ~/.bash_profile"
+  register: is_path
+  shell: grep -e '~/bin' ~/.bash_profile
+  failed_when: is_path.rc != 0
+  ignore_errors: true
+
+- name: "Add PATHs at ~/.bash_profile"
+  shell: echo 'export PATH=~/bin:$PATH' >> ~/.bash_profile
+  when: is_path.rc != 0

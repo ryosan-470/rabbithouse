@@ -1,0 +1,51 @@
+---
+- name: which pyenv
+  shell: source ~/.bash_profile; which pyenv executable=/bin/bash
+  register: pyenv_install
+  failed_when: pyenv_install.rc != 0
+  ignore_errors: True
+
+- name: install build environment
+  when: pyenv_install.rc != 0
+  become: true      
+  apt:
+    name: "{{ item }}"
+    state: latest
+    update_cache: yes
+  with_items:
+    - make
+    - libssl-dev
+    - zlib1g-dev
+    - libbz2-dev
+    - libreadline-dev
+    - libsqlite3-dev
+    - wget
+    - curl
+    - llvm
+    - libncurses5-dev
+    - xz-utils
+
+- name: git clone pyenv
+  when: pyenv_install.rc != 0
+  git:
+    repo: https://github.com/yyuu/pyenv
+    dest: ~/.pyenv
+
+- name: add pyenv path at ~/.bash_profile
+  when: pyenv_install.rc != 0
+  shell: "{{ item }} executable=/bin/bash"
+  with_items:
+    - echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.bash_profile
+    - echo 'export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.bash_profile
+
+- name: install python
+  shell: "{{ item }} executable=/bin/bash"
+  vars:
+    python_2_version: 2.7.13
+    python_3_version: 3.6.0
+  with_items:
+    - source ~/.bash_profile; pyenv -v
+    - source ~/.bash_profile; pyenv install -v "{{ python_2_version }}"
+    - source ~/.bash_profile; pyenv install -v "{{ python_3_version }}"
+    - source ~/.bash_profile; pyenv global "{{ python_3_version }}"
+

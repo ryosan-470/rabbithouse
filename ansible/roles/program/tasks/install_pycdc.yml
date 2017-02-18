@@ -1,0 +1,39 @@
+---
+- name: "Is pycdc available?"
+  stat:
+    path: ~/bin/pycdc
+  register: is_pycdc
+
+- name: "Install dependencies for pycdc"
+  when: is_pycdc.stat.exists == False
+  become: true
+  apt:
+    name: cmake
+    state: latest
+
+- name: "Get repository from GitHub"
+  when: is_pycdc.stat.exists == False
+  git:
+    repo: https://github.com/zrax/pycdc.git
+    dest: "{{ TOOLS_DIRECTORY_PROGRAMMING }}/pycdc"
+
+- name: "cmake to generate Makefile"
+  when: is_pycdc.stat.exists == False
+  command: cmake .
+  args:
+    chdir: "{{ TOOLS_DIRECTORY_PROGRAMMING }}/pycdc"
+
+- name: "Build pycdc"
+  when: is_pycdc.stat.exists == False
+  command: make -j
+  args:
+    chdir: "{{ TOOLS_DIRECTORY_PROGRAMMING }}/pycdc"
+
+- name: "Link pycdc to ~/bin directory"
+  file:
+    src: "{{ TOOLS_DIRECTORY_PROGRAMMING }}/pycdc/{{ item }}"
+    dest: "~/bin/{{ item }}"
+    state: link
+  with_items:
+    - pycdc
+    - pycdas
