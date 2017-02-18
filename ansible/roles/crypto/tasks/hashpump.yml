@@ -1,0 +1,39 @@
+---
+- name: "Is hashpump available?"
+  stat:
+    path: ~/bin/hashpump
+  register: is_hashpump
+
+- name: "Install dependencies for hashpump"
+  become: true
+  when: is_hashpump.stat.exists == False
+  apt:
+    name: "{{ item }}"
+    state: latest
+  with_items:
+    - g++
+    - libssl-dev
+
+- name: "Get hashpump from GitHub"
+  when: is_hashpump.stat.exists == False
+  git:
+    repo: https://github.com/bwall/HashPump.git
+    dest: "{{ TOOLS_DIRECTORY_CRYPTO }}/hashpump"
+
+- name: "Build hashpump"
+  when: is_hashpump.stat.exists == False
+  command: make -j
+  args:
+    chdir: "{{ TOOLS_DIRECTORY_CRYPTO }}/hashpump"
+
+- name: "Install python bindings for Python 3"
+  when: is_hashpump.stat.exists == False
+  command: python3 setup.py install --user
+  args:
+    chdir: "{{ TOOLS_DIRECTORY_CRYPTO }}/hashpump"
+
+- name: "Link hashpump to ~/bin"
+  file:
+    src: "{{ TOOLS_DIRECTORY_CRYPTO }}/hashpump/hashpump"
+    dest: ~/bin/hashpump
+    state: link
