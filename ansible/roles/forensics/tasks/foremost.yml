@@ -1,0 +1,12 @@
+---
+- name: "Is foremost available?"
+  shell: which foremost
+  register: is_foremost
+  ignore_errors: true
+
+- name: "Install foremost from apt"
+  become: true
+  when: is_foremost.rc != 0
+  apt:
+    name: foremost
+    state: latest

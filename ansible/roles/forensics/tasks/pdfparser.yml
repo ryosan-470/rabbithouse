@@ -1,0 +1,26 @@
+---
+- name: "Is pdf-parser available?"
+  stat:
+    path: ~/bin/pdf-parser
+  register: is_pdfparser
+
+- name: "DL source code"
+  when: is_pdfparser.stat.exists == False
+  get_url:
+    url: https://didierstevens.com/files/software/pdf-parser_V0_6_6.zip
+    dest: "{{ TOOLS_DIRECTORY_FORENSICS }}/pdf-parser.zip"
+
+- name: "Extract zip file"
+  when: is_pdfparser.stat.exists == False
+  command: "unzip {{ TOOLS_DIRECTORY_FORENSICS }}/pdf-parser.zip"
+
+- name: "Move pdf-parser.py and rename"
+  when: is_pdfparser.stat.exists == False
+  command: mv ~/pdf-parser.py ~/bin/pdf-parser
+
+- name: "Change pdf-parser privilege"
+  when: is_pdfparser.stat.exists == False
+  file:
+    path: ~/bin/pdf-parser
+    mode: 0655
+
