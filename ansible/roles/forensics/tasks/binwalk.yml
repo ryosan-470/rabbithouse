@@ -1,0 +1,50 @@
+---
+- name: "Is binwalk available?"
+  stat:
+    path: ~/bin/binwalk
+  register: is_binwalk
+
+- name: "Install dependencies for binwalk"
+  when: is_binwalk.stat.exists == False
+  become: true
+  apt:
+    name: "{{ item }}"
+    state: latest
+  with_items:
+    - python3-crypto
+    - mtd-utils
+    - gzip
+    - bzip2
+    - tar
+    - arj
+    - lhasa
+    - p7zip
+    - p7zip-full
+    - cabextract
+    - cramfsprogs
+    - cramfsswap
+    - squashfs-tools
+
+- name: "Get repository from GitHub"
+  when: is_binwalk.stat.exists == False
+  git:
+    repo: https://github.com/devttys0/binwalk
+    dest: "{{ TOOLS_DIRECTORY_FORENSICS }}/binwalk"
+
+- name: "checkout v2.1.1"
+  when: is_binwalk.stat.exists == False
+  command: git checkout v2.1.1
+  args:
+    chdir: "{{ TOOLS_DIRECTORY_FORENSICS }}/binwalk"
+
+- name: "Install binwalk at Python 3"
+  when: is_binwalk.stat.exists == False
+  command: python3 setup.py install --user
+  args:
+    chdir: "{{ TOOLS_DIRECTORY_FORENSICS }}/binwalk"
+
+- name: "Link binwalk to ~/bin directory"
+  file:
+    src: "~/.local/bin/binwalk"
+    dest: "~/bin/binwalk"
+    state: link
