@@ -1,0 +1,15 @@
+---
+- name: "Is pwntools available?"
+  command: python -c 'from pwn import *'
+  register: is_pwntools
+  ignore_errors: true
+
+- name: "Install dependencies for pwntools"
+  when: is_pwntools.rc != 0
+  apt:
+    name: python-dev
+    state: latest
+
+- name: "pip install pwntools"
+  command: pip install pwntools --user
+  when: is_pwntools.rc != 0

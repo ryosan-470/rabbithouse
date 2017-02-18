@@ -1,3 +1,4 @@
 ---
 - include: checksec.yml
+- include: pwntools.yml
 - include: rp.yml
