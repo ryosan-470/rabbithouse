@@ -1,0 +1,22 @@
+---
+- name: "Is rp++ available?"
+  stat:
+    path: ~/bin/rp++
+  register: is_rp
+
+- name: "Get rp++ from GitHub"
+  when: is_rp.stat.exists == False
+  get_url:
+    url: "https://github.com/0vercl0k/rp/releases/download/v1/{{ item }}"
+    dest: "~/bin/{{ item }}"
+    mode: 0655
+  with_items:
+    - rp-lin-x64
+    - rp-lin-x86
+
+- name: "Link rp-lin-x64 to rp++"
+  file:
+    src: ~/bin/rp-lin-x64
+    dest: ~/bin/rp++
+    state: link
+
