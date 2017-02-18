@@ -9,7 +9,9 @@
 - name: "Install the common apt packages"
   become: true
   apt:
-    name={{ item }} state=present update_cache=yes
+    name: "{{ item }}"
+    state: latest
+    update_cache: yes
   with_items:
     - git
     - zsh
@@ -17,3 +19,14 @@
     - build-essential
     - python
 
+- name: "Create directory to store tools"
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+    - ~/bin/
+    - "{{ TOOLS_DIRECTORY_CRYPTO }}"
+    - "{{ TOOLS_DIRECTORY_REVERSING }}"
+    - "{{ TOOLS_DIRECTORY_FORENSICS }}"
+    - "{{ TOOLS_DIRECTORY_MISC }}"
+    - "{{ TOOLS_DIRECTORY_PROGRAMMING }}"
