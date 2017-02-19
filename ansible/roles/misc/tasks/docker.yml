@@ -9,6 +9,7 @@
   get_url:
     url: https://get.docker.com/
     dest: /tmp/install_docker.sh
+    validate_certs: False
 
 - name: "Install docker"
   become: true

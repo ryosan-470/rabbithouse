@@ -6,6 +6,7 @@
 
 - name: "Install dependencies for pwntools"
   when: is_pwntools.rc != 0
+  become: true
   apt:
     name: python-dev
     state: latest

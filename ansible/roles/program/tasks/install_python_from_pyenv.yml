@@ -30,6 +30,7 @@
   git:
     repo: https://github.com/yyuu/pyenv
     dest: ~/.pyenv
+    validate_certs: False
 
 - name: add pyenv path at ~/.bash_profile
   when: pyenv_install.rc != 0
