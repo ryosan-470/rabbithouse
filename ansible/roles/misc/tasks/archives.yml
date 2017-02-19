@@ -1,0 +1,12 @@
+---
+- name: "Install archives from apt"
+  become: true
+  apt:
+    name: "{{ item }}"
+    state: latest
+  with_items:
+    - p7zip-full
+    - unrar
+    - rar
+    - unzip
+
