@@ -1,0 +1,18 @@
+---
+- name: "Is xortool available?"
+  stat:
+    path: ~/bin/xortool
+  register: is_xortool
+
+- name: "Install xortool using pip"
+  when: is_xortool.stat.exists == False
+  command: pip install 'git+https://github.com/hellman/xortool.git' --user --upgrade
+
+- name: "Link xortool to ~/bin"
+  file:
+    src: "~/.local/bin/{{ item }}"
+    dest: "~/bin/{{ item }}"
+    state: link
+  with_items:
+    - xortool
+    - xortool-xor
