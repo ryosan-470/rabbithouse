@@ -1,0 +1,25 @@
+---
+- name: "Is docker available?"
+  shell: docker run hello-world
+  register: is_docker
+  ignore_errors: true
+
+- name: "Get install script from https://get.docker.com"
+  when: is_docker.rc != 0
+  get_url:
+    url: https://get.docker.com/
+    dest: /tmp/install_docker.sh
+
+- name: "Install docker"
+  become: true
+  when: is_docker.rc != 0
+  command: sh /tmp/install_docker.sh
+
+- name: "Post-installation steps"
+  become: true
+  when: is_docker.rc != 0
+  command: "{{ item }}"
+  with_items:
+    - docker run hello-world
+    - usermod -aG docker ubuntu
+

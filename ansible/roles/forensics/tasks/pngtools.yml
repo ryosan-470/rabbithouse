@@ -1,0 +1,12 @@
+---
+- name: "Is pngtools available?"
+  shell: which pngtools
+  register: is_pngtools
+  ignore_errors: true
+
+- name: "Install pngtools from apt"
+  become: true
+  when: is_pngtools.rc != 0
+  apt:
+    name: pngtools
+    state: latest

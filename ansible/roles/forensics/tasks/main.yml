@@ -2,3 +2,4 @@
 - include: binwalk.yml
 - include: foremost.yml
 - include: pdfparser.yml
+- include: pngtools.yml
