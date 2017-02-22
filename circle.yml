@@ -1,0 +1,16 @@
+machine:
+  services:
+    - docker
+  timezone:
+    Asia/Tokyo
+  post:
+    - pyenv global 2.7.12 3.6.0
+
+dependencies:
+  pre:
+    - pip install ansible urllib3  pyopenssl ndg-httpsclient pyasn1
+
+test:
+  override:
+    - ansible-playbook ./ansible/main.yml -i ./ansible/inventry_localhost --syntax-check
+    - ansible-playbook -vvv ansible/main.yml -i ansible/inventry_localhost -c local

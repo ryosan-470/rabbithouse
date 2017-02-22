@@ -9,6 +9,7 @@
   get_url:
     url: "https://www.unix-ag.uni-kl.de/~conrad/krypto/pkcrack/pkcrack-1.2.2.tar.gz"
     dest: "{{ TOOLS_DIRECTORY_CRYPTO }}/pkcrack-1.2.2.tar.gz"
+    validate_certs: False
 
 - name: "Extract source code"
   when: is_pkcrack.stat.exists == False

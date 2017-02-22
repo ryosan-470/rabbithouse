@@ -1,4 +1,6 @@
 # RabbitHouse
+[![Build Status](https://circleci.com/gh/ryo-san470/rabbithouse.svg?style=shield)](https://circleci.com/gh/ryo-san470/rabbithouse)
+[![License](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE.md)
 
 RabbitHouse is CTF environment for me at Ubuntu 16.04.
 

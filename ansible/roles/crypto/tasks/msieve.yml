@@ -20,6 +20,7 @@
   get_url:
     url: "https://downloads.sourceforge.net/project/msieve/msieve/Msieve%20v1.53/msieve153_src.tar.gz?r=https%3A%2F%2Fsourceforge.net%2Fprojects%2Fmsieve%2Ffiles%2Fmsieve%2F&ts=1487435392&use_mirror=jaist"
     dest: "{{ TOOLS_DIRECTORY_CRYPTO }}/msieve.tar.gz"
+    validate_certs: False
 
 - name: "Extract source code"
   when: is_msieve.stat.exists == False
