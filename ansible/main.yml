@@ -1,9 +1,10 @@
 ---
 - hosts: all
   roles:
-    - common
+    - pre
     - crypto
     - forensics
     - reversing
     - program
     - misc
+    - post

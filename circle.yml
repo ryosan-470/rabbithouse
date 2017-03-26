@@ -8,9 +8,9 @@ machine:
 
 dependencies:
   pre:
-    - pip install ansible urllib3  pyopenssl ndg-httpsclient pyasn1
+    - pip install ansible urllib3 pyopenssl ndg-httpsclient pyasn1
 
 test:
   override:
-    - ansible-playbook ./ansible/main.yml -i ./ansible/inventry_localhost --syntax-check
-    - ansible-playbook -vvv ansible/main.yml -i ansible/inventry_localhost -c local
+    - ansible-playbook ansible/main.yml -i ansible/inventry_localhost --syntax-check
+    - ansible-playbook ansible/main.yml -i ansible/inventry_localhost -c local -vvv

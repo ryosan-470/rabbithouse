@@ -1,0 +1,3 @@
+---
+# post installation
+- include: pip.yml

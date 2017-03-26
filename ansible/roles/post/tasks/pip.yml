@@ -1,0 +1,21 @@
+---
+- name: "Install library for python2"
+  pip:
+    name: "{{ item }}"
+    executable: pip2
+    extra_args: --user
+  with_items:
+    - ipython
+    - requests
+    - pycrypto
+
+- name: "Install library for python3"
+  pip:
+    name: "{{ item }}"
+    executable: pip3
+    extra_args: --user
+  with_items:
+    - ipython
+    - requests
+    - pycrypto
+
